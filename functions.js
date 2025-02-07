@@ -65,6 +65,7 @@ document.getElementById("calc").addEventListener("click", (event) => {
     const kmToMiValue = (document.getElementById("kmToMi").value);
     const miToKmValue = (document.getElementById("miToKm").value);
 
+
     let result2 = [];
 
     const isKmToMi = document.getElementById("default-radio-1").checked;
@@ -87,6 +88,7 @@ document.getElementById("calc").addEventListener("click", (event) => {
 
     document.getElementById("result2").value = result2.join(', ');
 
+});
 
 
 
