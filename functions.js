@@ -78,27 +78,29 @@ document.getElementById("default-radio-2").addEventListener("click", (event) => 
     }
 })
 
-function openTab(tabId) {
-    let tabs = document.querySelectorAll('div[id^="tab"]');
-    tabs.forEach(tab => tab.style.display = "none");
-
-    document.getElementById(tabId).style.display = "block";
-}
-
 function convertTemperature() {
-    let input = parseFloat(document.getElementById('cToF').value) || parseFloat(document.getElementById('fToC').value);
-    if (isNaN(input)) {
-        document.getElementById('result3').value = "Please enter a valid number.";
+    let inputField = document.querySelector('input[name="default-radio"]:checked').id === "default-radio-1" 
+                     ? document.getElementById('cToF') 
+                     : document.getElementById('fToC');
+
+    let inputValues = inputField.value.split(',').map(val => parseFloat(val.trim())).filter(val => !isNaN(val));
+
+    if (inputValues.length === 0) {
+        document.getElementById('result3').value = "Please enter valid numbers.";
         return;
     }
 
-    let conversionType = document.querySelector('input[name="default-radio"]:checked').nextElementSibling.innerText.trim() === "C to F" ? "cToF" : "fToC";
-
+    let conversionType = document.querySelector('input[name="default-radio"]:checked').id === "default-radio-1" ? "cToF" : "fToC";
     let convertFunc = getConversion(conversionType);
-    let result = convertFunc([input])[0];
+    let results = convertFunc(inputValues);
+
+    let resultText = inputValues.map((val, index) => `${val}° ${conversionType.startsWith("c") ? "C" : "F"} = ${results[index].toFixed(2)}° ${conversionType.endsWith("F") ? "F" : "C"}`).join("\n");
 
     let resultField = document.getElementById('result3');
-    resultField.value = `${input}° ${conversionType.startsWith("c") ? "C" : "F"} = ${result.toFixed(2)}° ${conversionType.endsWith("F") ? "F" : "C"}`;
+    resultField.value = resultText;
+
+    resultField.style.height = "auto";
+    resultField.style.height = (resultField.scrollHeight) + "px";
 }
     
 document.getElementById("default-radio-2").addEventListener("click", () => {
