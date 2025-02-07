@@ -102,25 +102,69 @@ document.getElementById("calc").addEventListener("click", (event) => {
 function convertTemperature() {
     let inputField = document.querySelector('input[name="default-radio"]:checked').id === "default-radio-1" ? document.getElementById('cToF') : document.getElementById('fToC');
 
-    let inputValues = inputField.value.split(',').map(val => parseFloat(val.trim())).filter(val => !isNaN(val));
+document.getElementById("calc").addEventListener("click", (event) => {
+    event.preventDefault();
 
-    if (inputValues.length === 0) {
-        document.getElementById('result3').value = "Please enter valid numbers.";
-        return;
+    const kmToMiValue = (document.getElementById("kmToMi").value);
+    const miToKmValue = (document.getElementById("miToKm").value);
+
+
+    let result2 = [];
+
+    const isKmToMi = document.getElementById("default-radio-1").checked;
+
+    if (isKmToMi) {
+        const kmValues = kmToMiValue.split(',').map(val => parseFloat(val.trim()))
+        if (kmValues.every(val => !isNaN(val))) {
+            const kmToMiConverter = getConversion("kmToMi");
+            result2 = kmToMiConverter(kmValues);
+        } else {
+            result2 = ["Invalid input for KM"];
+        }
+    } else {
+        const miValues = miToKmValue.split(',').map(val => parseFloat(val.trim()));
+        if (miValues.every(val => !isNaN(val))) {
+            const miToKmConverter = getConversion("miToKm");
+            result2 = miToKmConverter(miValues);
+        }
     }
 
-    let conversionType = document.querySelector('input[name="default-radio"]:checked').id === "default-radio-1" ? "cToF" : "fToC";
-    let convertFunc = getConversion(conversionType);
-    let results = convertFunc(inputValues);
-
-    let resultText = inputValues.map((val, index) => `${val}° ${conversionType.startsWith("c") ? "C" : "F"} = ${results[index].toFixed(2)}° ${conversionType.endsWith("F") ? "F" : "C"}`).join("\n");
-
-    let resultField = document.getElementById('result3');
-    resultField.value = resultText;
+    document.getElementById("result2").value = result2.join(', ');
 
     resultField.style.height = "auto";
     resultField.style.height = (resultField.scrollHeight) + "px";
 }
+});
+
+document.getElementById("calc").addEventListener("click", (event) => {
+    event.preventDefault();
+
+    const cToFValue = (document.getElementById("cToF").value);
+    const fToCValue = (document.getElementById("fToC").value);
+
+    let result3 = [];
+
+    const isCToF = document.getElementById("default-radio-1").checked;
+
+    if (isCToF) {
+        const cValues = cToFValue.split(',').map(val => parseFloat(val.trim()))
+        if (cValues.every(val => !isNaN(val))) {
+            const cToFConverter = getConversion("cToF");
+            result3 = cToFConverter(cValues);
+        } else {
+            result3 = ["Invalid input for KM"];
+        }
+    } else {
+        const fValues = fToCValue.split(',').map(val => parseFloat(val.trim()));
+        if (fValues.every(val => !isNaN(val))) {
+            const fToCConverter = getConversion("fToC");
+            result3 = fToCConverter(fValues);
+        }
+    }
+
+    document.getElementById("result3").value = result3.join(', ');
+
+});
 
 // Conversion Check Functions:
 // Changes available input based on conversion type
@@ -164,7 +208,7 @@ document.getElementById("default-radio-1").addEventListener("click", (event) => 
         document.getElementById("result2").value = "";
     }
 })
-    
+
 document.getElementById("default-radio-2").addEventListener("click", () => {
     document.getElementById("cToF").readOnly = true;
     document.getElementById("fToC").removeAttribute("readonly");
@@ -183,3 +227,23 @@ document.getElementById("calc").addEventListener("click", (event) => {
     event.preventDefault();
     convertTemperature();
 });
+
+document.getElementById("default-radio-2").addEventListener("click", (event) => {
+
+    if (event.target.checked) {
+        document.getElementById("cToF").readOnly = true;
+        document.getElementById("fToC").removeAttribute("readonly");
+        document.getElementById("cToF").value = "";
+        document.getElementById("result3").value = "";
+    }
+})
+
+document.getElementById("default-radio-1").addEventListener("click", (event) => {
+
+    if (event.target.checked) {
+        document.getElementById("cToF").readOnly = false;
+        document.getElementById("fToC").readOnly = true;
+        document.getElementById("fToC").value = "";
+        document.getElementById("result3").value = "";
+    }
+})
