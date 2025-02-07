@@ -1,3 +1,11 @@
+// File: functions.js
+// Author: Kourosh, Karie, Erwin Aguilar, Lily Power
+// Date Created: 2025-02-03
+// Last Modified: 2025-02-06
+// Version: 1.0
+
+// Conversion Formula Function:
+// Checks for type of conversion and returns appropriate conversion formula
 const getConversion = (from) => {
 
     const convert = (value) => {
@@ -25,6 +33,8 @@ const getConversion = (from) => {
     };
 }
 
+// Convert Value Event Listeners/Functions:
+// Takes value(s) from user input and converts them depending on selected conversion
 document.getElementById("calc").addEventListener("click", (event) => {
 
     event.preventDefault();
@@ -58,30 +68,39 @@ document.getElementById("calc").addEventListener("click", (event) => {
 
 });
 
-document.getElementById("default-radio-1").addEventListener("click", (event) => {
+document.getElementById("calc").addEventListener("click", (event) => {
+    event.preventDefault();
 
-    if (event.target.checked) {
-        document.getElementById("kgToLb").readOnly = true;
-        document.getElementById("lbToKg").removeAttribute("readonly");
-        document.getElementById("kgToLb").value = "";
-        document.getElementById("result").value = "";
+    const kmToMiValue = (document.getElementById("kmToMi").value);
+    const miToKmValue = (document.getElementById("miToKm").value);
+
+
+    let result2 = [];
+
+    const isKmToMi = document.getElementById("default-radio-1").checked;
+
+    if (isKmToMi) {
+        const kmValues = kmToMiValue.split(',').map(val => parseFloat(val.trim()))
+        if (kmValues.every(val => !isNaN(val))) {
+            const kmToMiConverter = getConversion("kmToMi");
+            result2 = kmToMiConverter(kmValues);
+        } else {
+            result2 = ["Invalid input for KM"];
+        }
+    } else {
+        const miValues = miToKmValue.split(',').map(val => parseFloat(val.trim()));
+        if (miValues.every(val => !isNaN(val))) {
+            const miToKmConverter = getConversion("miToKm");
+            result2 = miToKmConverter(miValues);
+        }
     }
+
+    document.getElementById("result2").value = result2.join(', ');
 
 });
 
-document.getElementById("default-radio-2").addEventListener("click", (event) => {
-    if (event.target.checked) {
-        document.getElementById("kgToLb").readOnly = false;
-        document.getElementById("lbToKg").readOnly = true;
-        document.getElementById("lbToKg").value = "";
-        document.getElementById("result").value = "";
-    }
-})
-
 function convertTemperature() {
-    let inputField = document.querySelector('input[name="default-radio"]:checked').id === "default-radio-1" 
-                     ? document.getElementById('cToF') 
-                     : document.getElementById('fToC');
+    let inputField = document.querySelector('input[name="default-radio"]:checked').id === "default-radio-1" ? document.getElementById('cToF') : document.getElementById('fToC');
 
     let inputValues = inputField.value.split(',').map(val => parseFloat(val.trim())).filter(val => !isNaN(val));
 
@@ -102,59 +121,9 @@ function convertTemperature() {
     resultField.style.height = "auto";
     resultField.style.height = (resultField.scrollHeight) + "px";
 }
-    
-document.getElementById("default-radio-2").addEventListener("click", () => {
-    document.getElementById("cToF").readOnly = true;
-    document.getElementById("fToC").removeAttribute("readonly");
-    document.getElementById("cToF").value = "";
-    document.getElementById("result3").value = "";
-});
 
-document.getElementById("default-radio-1").addEventListener("click", () => {
-    document.getElementById("cToF").readOnly = false;
-    document.getElementById("fToC").readOnly = true;
-    document.getElementById("fToC").value = "";
-    document.getElementById("result3").value = "";
-});
-
-document.getElementById("calc").addEventListener("click", (event) => {
-    event.preventDefault();
-    convertTemperature();
-});
-
-document.getElementById("calc").addEventListener("click", (event) => {
-
-    event.preventDefault();
-
-    const kgToLbValue = (document.getElementById("kgToLb").value);
-    const lbToKgValue = (document.getElementById("lbToKg").value);
-
-    let result = [];
-
-    const isKgToLb = document.getElementById("default-radio-2").checked;
-
-    if (isKgToLb) {
-
-        const kgValues = kgToLbValue.split(',').map(val => parseFloat(val.trim()));
-        if (kgValues.every(val => !isNaN(val))) {
-            const kgToLbConverter = getConversion("kgToLb");
-            result = kgToLbConverter(kgValues);
-        } else {
-            result = ["Invalid input for KG"];
-        }
-    } else {
-        const lbValues = lbToKgValue.split(',').map(val => parseFloat(val.trim()));
-        if (lbValues.every(val => !isNaN(val))) {
-            const lbToKgConverter = getConversion("lbToKg");
-            result = lbToKgConverter(lbValues);
-        }
-    }
-
-
-    document.getElementById("result").value = result.join(', ');
-
-});
-
+// Conversion Check Functions:
+// Changes available input based on conversion type
 document.getElementById("default-radio-1").addEventListener("click", (event) => {
 
     if (event.target.checked) {
@@ -174,3 +143,43 @@ document.getElementById("default-radio-2").addEventListener("click", (event) => 
         document.getElementById("result").value = "";
     }
 })
+
+
+document.getElementById("default-radio-2").addEventListener("click", (event) => {
+
+    if (event.target.checked) {
+        document.getElementById("kmToMi").readOnly = true;
+        document.getElementById("miToKm").removeAttribute("readonly");
+        document.getElementById("kmToMi").value = "";
+        document.getElementById("result2").value = "";
+    }
+})
+
+document.getElementById("default-radio-1").addEventListener("click", (event) => {
+
+    if (event.target.checked) {
+        document.getElementById("kmToMi").readOnly = false;
+        document.getElementById("miToKm").readOnly = true;
+        document.getElementById("miToKm").value = "";
+        document.getElementById("result2").value = "";
+    }
+})
+    
+document.getElementById("default-radio-2").addEventListener("click", () => {
+    document.getElementById("cToF").readOnly = true;
+    document.getElementById("fToC").removeAttribute("readonly");
+    document.getElementById("cToF").value = "";
+    document.getElementById("result3").value = "";
+});
+
+document.getElementById("default-radio-1").addEventListener("click", () => {
+    document.getElementById("cToF").readOnly = false;
+    document.getElementById("fToC").readOnly = true;
+    document.getElementById("fToC").value = "";
+    document.getElementById("result3").value = "";
+});
+
+document.getElementById("calc").addEventListener("click", (event) => {
+    event.preventDefault();
+    convertTemperature();
+});
